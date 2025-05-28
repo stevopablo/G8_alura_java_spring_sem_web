@@ -1,10 +1,13 @@
 package br.com.alura.screenmatch.main;
 
 import br.com.alura.screenmatch.model.SerieModel;
+import br.com.alura.screenmatch.model.TemporadaModel;
 import br.com.alura.screenmatch.service.ConsumoAPI;
 import br.com.alura.screenmatch.service.ConverteDados;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -16,9 +19,17 @@ public class Main {
 
     public void ExibirMenu() throws IOException, InterruptedException {
         System.out.println("Enter Movie/Serie Title to search: ");
-        var name = input.nextLine().replace(" ", "+");
+        var name = input.nextLine().replace(" ", "+").trim();
         var json = consumoAPI.ObterDados(BASE_URL + name + KEY);
         SerieModel data = conversor.obterDados(json, SerieModel.class);
         System.out.println("data = " + data);
+
+        List<TemporadaModel> temporadaList = new ArrayList<>();
+        for (int i = 1; i <= data.totalTemporadas(); i++) {
+            json = consumoAPI.ObterDados(BASE_URL + name + "&season=" + i  + KEY);
+            TemporadaModel dataSeason = conversor.obterDados(json, TemporadaModel.class);
+            temporadaList.add(dataSeason);
+        }
+        temporadaList.forEach(System.out::println);
     }
 }
