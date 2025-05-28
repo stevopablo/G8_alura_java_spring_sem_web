@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch.main;
 
+import br.com.alura.screenmatch.model.EpisodioModel;
 import br.com.alura.screenmatch.model.SerieModel;
 import br.com.alura.screenmatch.model.TemporadaModel;
 import br.com.alura.screenmatch.service.ConsumoAPI;
@@ -31,5 +32,8 @@ public class Main {
             temporadaList.add(dataSeason);
         }
         temporadaList.forEach(System.out::println);
+
+        temporadaList.forEach(t ->
+        t.episodios().forEach(episodioModel -> System.out.println("episodioModel.titulo() = " + episodioModel.titulo())));
     }
 }
