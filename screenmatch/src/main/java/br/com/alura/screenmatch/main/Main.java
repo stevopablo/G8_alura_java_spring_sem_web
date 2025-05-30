@@ -10,10 +10,7 @@ import br.com.alura.screenmatch.service.ConverteDados;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -75,5 +72,34 @@ public class Main {
                                 "episode: " + e.getTitulo() +
                                 "released: " + e.getLancamento().format(formatador)
                 ));
+
+        Map<Integer, Double> avalicaoPorTemporada = episodioList.stream()
+                    .filter(e -> e.getAvaliacao() > 0.0)
+                    .collect(Collectors.groupingBy(Episodio::getTemporada,
+                            Collectors.averagingDouble(Episodio::getAvaliacao)));
+
+        System.out.println("avalicaoPorTemporada = " + avalicaoPorTemporada);
+
+        DoubleSummaryStatistics estatistica = episodioList.stream()
+                .filter(e -> e.getAvaliacao() > 0.0)
+                .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+
+        System.out.println("estatistica = " + estatistica);
+        System.out.println("Media: "+ estatistica.getAverage());
+        System.out.println("Pior episodio: "+ estatistica.getMin());
+        System.out.println("Melhor episodio: "+ estatistica.getMax());
+        System.out.println("Quantidade: "+ estatistica.getCount());
+
+//        System.out.println("Search for an episode: ");
+//        String trechoTitulo = input.next();
+//        Optional<Episodio> searchEpisode = episodioList.stream()
+//                .filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase()))
+//                .findFirst();
+//
+//        if (searchEpisode.isPresent()) {
+//        System.out.println("season: "+ searchEpisode.get().getTemporada());
+//        } else {
+//            System.out.println("Episode not found");
+//        }
     }
 }
